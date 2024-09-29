@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logoutUser'),
 
     # Professor Exam Management
+    path('prof/',views.index_prof,name='index_prof'),
     path('prof/exams/', views.view_exams, name='view_exams'),
     path('prof/exams/<int:exam_id>/', views.view_exam, name='view_exam'),
     path('prof/exams/<int:exam_id>/edit/', views.edit_exam, name='edit_exam'),
@@ -37,6 +38,7 @@ urlpatterns = [
     path('prof/students/', views.view_students, name='view_students'),
 
     # Student Exam and Result Views
+    path('student/',views.index_stu,name='index_stu'),
     path('student/exams/', views.exams, name='exams'),
     path('student/results/', views.results, name='results'),
 ]

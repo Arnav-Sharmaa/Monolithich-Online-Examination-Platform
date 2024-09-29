@@ -5,8 +5,8 @@
 {% block navitem_title %}{{ qpaper.qPaperTitle }}{% endblock navitem_title %}
 
 {% block buttons %}
-    <a class="btn btn-info my-sm-0 mx-2" href="{% url 'prof:view_all_ques' %}" target="_blank">All Questions</a>
-    <a class="btn btn-light my-sm-0" href="{% url 'prof:make_paper' %}">Question Papers</a>
+    <a class="btn btn-info my-sm-0 mx-2" href="{% url 'view_all_ques' %}" target="_blank">All Questions</a>
+    <a class="btn btn-light my-sm-0" href="{% url 'make_paper' %}">Question Papers</a>
 {% endblock buttons %}
 
 {% block body %}

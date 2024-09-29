@@ -21,15 +21,58 @@ def index(request):
                 return redirect('/admin')
 
             if user.groups.filter(name='Professor').exists():
-                return redirect('view_exams')
+                return redirect('index_prof')
 
-            return redirect('student:index')
+            return redirect('index_stu')
 
         return render(request, 'main/login.html', {'wrong_cred_message': 'Error'})
 
     return render(request, 'main/login.html')
 
+def index_prof(request):
+    prof = request.user
+    return render(request, 'prof/index.html', {'prof': prof })
 
+
+def index_stu(request):
+    student = request.user
+
+    studentGroup = Special_Students.objects.filter(students=student)
+    examsList = []
+    if studentGroup.exists():
+        for student_ in studentGroup:
+            stud_exams = Exam_Model.objects.filter(student_group=student_)
+            if stud_exams.exists():
+                if stud_exams.count() > 1:
+                    for stud_exam in stud_exams:
+                        examsList.append(stud_exam)
+                else:
+                    examsList.append(Exam_Model.objects.get(
+                        student_group=student_))
+
+    if examsList:
+        for exam in examsList:
+            currentExamList = StuExam_DB.objects.filter(
+                examname=exam.name, student=student)
+
+            if not currentExamList.exists():  # If no exam are there in then add exams
+                tempExam = StuExam_DB(student=student, examname=exam.name,
+                                        qpaper=exam.question_paper, score=0, completed=0)
+                tempExam.save()
+                exam_question_paper = exam.question_paper
+                questions_in_paper = exam_question_paper.questions.all()
+                
+                for ques in questions_in_paper:
+                    # add all the questions from the prof to student database
+                    studentQuestion = Stu_Question(question=ques.question, optionA=ques.optionA, optionB=ques.optionB,
+                                                    optionC=ques.optionC, optionD=ques.optionD,
+                                                    answer=ques.answer, student=student)
+                    studentQuestion.save()
+                    tempExam.questions.add(studentQuestion)
+
+    return render(request, 'student/index.html', {
+        'stud': student
+    })
 def logoutUser(request):
     logout(request)
     return render(request, 'main/logout.html', {'logout_message': 'Logged out Successfully'})
@@ -51,7 +94,7 @@ def view_exams(request):
             exam.professor = prof
             exam.save()
             form.save_m2m()
-            return redirect('prof:view_exams')
+            return redirect('view_exams')
 
     exams = Exam_Model.objects.filter(professor=prof)
 
@@ -80,7 +123,7 @@ def edit_exam(request, exam_id):
         form = ExamForm(request.POST, instance=exam)
         if form.is_valid():
             form.save()
-            return redirect('prof:view_exams')
+            return redirect('view_exams')
 
     return render(request, 'prof/exam/edit_exam.html', {
         'form': new_Form, 'exam': exam, 'prof': prof
@@ -91,7 +134,7 @@ def delete_exam(request, exam_id):
     prof = request.user
     exam = Exam_Model.objects.get(professor=prof, pk=exam_id)
     exam.delete()
-    return redirect('prof:view_exams')
+    return redirect('view_exams')
 
 
 def create_student_group(request):
@@ -105,7 +148,7 @@ def create_student_group(request):
             group.save()
             form.save_m2m()
 
-            return redirect('prof:view_groups')
+            return redirect('view_groups')
 
     return render(request, 'prof/group/addview_groups.html', {
         'special_students_db': Special_Students.objects.filter(professor=prof), 'prof': prof, 'groupForm': Group_Form()
@@ -144,7 +187,7 @@ def edit_group(request, group_id):
         form = Group_Form(request.POST, instance=group)
         if form.is_valid():
             form.save()
-            return redirect('prof:view_groups')
+            return redirect('view_groups')
 
     return render(request, 'prof/group/edit_group.html', {
         'prof': prof, 'group': group, 'group_form': group_form
@@ -154,7 +197,7 @@ def edit_group(request, group_id):
 def delete_group(request, group_id):
     prof = request.user
     Special_Students.objects.filter(professor=prof, pk=group_id).delete()
-    return redirect('prof:view_groups')
+    return redirect('view_groups')
 
 
 def add_question(request):
@@ -166,7 +209,7 @@ def add_question(request):
             form = form.save(commit=False)
             form.professor = prof
             form.save()
-            return redirect('prof:view_all_ques')
+            return redirect('view_all_ques')
 
     return render(request, 'prof/question/question.html', {
         'question_db': Question_DB.objects.filter(professor=prof), 'form': QForm(), 'prof': prof
@@ -204,7 +247,7 @@ def edit_question(request, ques_qno):
         form = QForm(request.POST, instance=ques)
         if form.is_valid():
             form.save()
-            return redirect('prof:view_all_ques')
+            return redirect('view_all_ques')
 
     return render(request, 'prof/question/edit_question.html', {
         'i': Question_DB.objects.filter(professor=prof, qno=ques_qno).first(), 'form': form, 'prof': prof
@@ -366,7 +409,7 @@ def exams(request):
         curr_time = timezone.now()
 
         if curr_time < exam_start_time:
-            return redirect('student:exams')
+            return redirect('exams')
 
         stuExam.questions.all().delete()
 

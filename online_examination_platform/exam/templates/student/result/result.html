@@ -2,7 +2,7 @@
 
 {% block title %}View Paper{% endblock title %}
 {% block nav_title %}{{ Title }}{% endblock nav_title %}
-{% block url %}{% url 'student:index' %}{% endblock url %}
+{% block url %}{% url 'index_stu' %}{% endblock url %}
 {% block action %}Home{% endblock action %}
 
 {% block body %}
@@ -14,7 +14,7 @@
         <hr class="my-4">
         <p>Visit the link below to check your result.</p>
         <p class="lead">
-          <a class="btn btn-primary" href="{%url 'student:results'%}"  role="button">Check results</a>
+          <a class="btn btn-primary" href="{%url 'results'%}"  role="button">Check results</a>
         </p>
     </div>
 </center>

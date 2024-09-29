@@ -7,7 +7,7 @@
 {% block navitem_title %}Groups{% endblock navitem_title %}
 
 {% block buttons %}
-    <a class="btn btn-light" href="{% url 'prof:index' %}">Home</a> 
+    <a class="btn btn-light" href="{% url 'index_prof' %}">Home</a> 
 {% endblock buttons %}
 
 {% block body %}
@@ -27,7 +27,7 @@
             <form class="form-inline my-2 my-lg-0">
                 <input id="searchGroup" class="form-control mr-sm-2" type="search" placeholder="Search Group"
                     aria-label="Search">
-                    <a class="btn btn-dark" href="{% url 'prof:view_exams' %}" target="_blank">View Exams</a>
+                    <a class="btn btn-dark" href="{% url 'view_exams' %}" target="_blank">View Exams</a>
             </form>
             <div class="row">
                 {% for group in special_students_db %}
@@ -47,7 +47,7 @@
                                     No exams associated
                             {% endfor %}
                         </p>
-                        <a href="{% url 'prof:edit_group' group.id %}"
+                        <a href="{% url 'edit_group' group.id %}"
                             class="card-link btn btn-info">Edit</a>
                     </div>
                 </div>

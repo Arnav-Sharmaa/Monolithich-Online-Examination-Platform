@@ -9,7 +9,7 @@
 {% block buttons %}
     <button type="button" class="btn btn-primary mx-3" id="updateButton"
     onclick="smoothScroll(document.getElementById('exams'))">View all Exams</button>
-    <a class="btn btn-light " href="{% url 'prof:index' %}">Home</a>
+    <a class="btn btn-light " href="{% url 'index_prof' %}">Home</a>
 {% endblock buttons %}
 
 {% block body %}
@@ -32,7 +32,7 @@
                 <form class="form-inline my-2">
                     <input id="searchExam" class="form-control mr-sm-2" type="search" placeholder="Search Exam"
                         aria-label="Search">
-                    <a class="btn btn-dark" href="{% url 'prof:view_groups' %}" target="_blank">View
+                    <a class="btn btn-dark" href="{% url 'view_groups' %}" target="_blank">View
                         Groups</a>
                 </form>
                 <div class="row">
@@ -49,13 +49,13 @@
                                 Total Marks : {{t.total_marks}}<br>
                                 Duration : {{t.duration}}<br>
                                 Question Paper : <a
-                                    href="{% url 'prof:view_specific_paper' t.question_paper.id %}">{{ t.question_paper.qPaperTitle }}</a><br>
+                                    href="{% url 'view_specific_paper' t.question_paper.id %}">{{ t.question_paper.qPaperTitle }}</a><br>
                                 Student Group(s) :
                                 {% for group in t.student_group.all %}
                                 {{ group.category_name }}
                                 {% endfor %}
                             </p>
-                            <a href="{% url 'prof:edit_exam' t.id %}" class="card-link btn btn-info">Edit</a>
+                            <a href="{% url 'edit_exam' t.id %}" class="card-link btn btn-info">Edit</a>
                         </div>
                     </div>
                     {% empty %}

@@ -5,7 +5,7 @@
 {% block navbar_title %}Edit group{% endblock navbar_title %}
 
 {% block buttons %}
-    <a class="btn btn-warning" href="{% url 'prof:view_groups' %}">Cancel</a>
+    <a class="btn btn-warning" href="{% url 'view_groups' %}">Cancel</a>
 {% endblock buttons %}
 
 {% block body %}
@@ -17,6 +17,6 @@
                 <input class="btn btn-info" type="submit" value="Update">
             </form>
         </div>
-        <a onclick="return confirm('Are you sure you want to delete this group?')" class="btn btn-danger my-3" href="{% url 'prof:delete_group' group.id %}">Delete</a><br>
+        <a onclick="return confirm('Are you sure you want to delete this group?')" class="btn btn-danger my-3" href="{% url 'delete_group' group.id %}">Delete</a><br>
     </div>
 {% endblock body %}
