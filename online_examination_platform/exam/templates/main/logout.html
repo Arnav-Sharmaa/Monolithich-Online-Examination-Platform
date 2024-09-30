@@ -3,12 +3,19 @@
 {% block title %}Logout{% endblock title %}
 
 {% block body %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>{{ logout_message }}</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+<style>
+    body {
+        background-image: url("https://wallpapercave.com/wp/wp7682755.jpg");
+    }
+</style>
+    <div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="width: 100%; max-width: 500px;">
+            <strong>{{ logout_message }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-    <a href="{% url 'index' %}">Click here to Login</a>
+        <a href="{% url 'index' %}" class="btn btn-primary btn-lg mt-4" style="width: 200px;">Click here to Login</a>
+    </div>
 {% endblock body %}
