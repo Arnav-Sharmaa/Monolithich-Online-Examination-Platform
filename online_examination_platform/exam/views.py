@@ -1,11 +1,57 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseForbidden
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User ,Group
 from django.utils import timezone
-
+from django import forms
 from exam.models import *
+from django.contrib.auth.forms import UserCreationForm
 
+
+
+
+
+#code for sign up 
+class SignUpForm(UserCreationForm):
+    group = forms.ChoiceField(choices=[('Professor', 'Professor'), ('Student', 'Student')], required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2', 'group']
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+
+            # Get selected group and assign it to the user
+            group_name = form.cleaned_data.get('group')
+            group = Group.objects.get(name=group_name)
+            user.groups.add(group)
+
+            # Automatically log in the user after registration
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+
+                # Redirect based on group
+                if group_name == 'Professor':
+                    return redirect('index_prof')
+                else:
+                    return redirect('index_stu')
+
+            return redirect('index')  # Redirect to some page after sign-up
+    else:
+        form = SignUpForm()
+
+    return render(request, 'main/signup.html', {'form': form})
+
+##end
+
+    
 
 # Create your views here.
 def index(request):
@@ -28,6 +74,7 @@ def index(request):
         return render(request, 'main/login.html', {'wrong_cred_message': 'Error'})
 
     return render(request, 'main/login.html')
+    
 
 def index_prof(request):
     prof = request.user

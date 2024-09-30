@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('logout/', views.logoutUser, name='logoutUser'),
+    path('signup/', views.signup, name='signup'),
 
     # Professor Exam Management
     path('prof/',views.index_prof,name='index_prof'),

@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Sign Up{% endblock title %}
+{% block body %}
+<style>
+    body {
+        background-image: url("https://wallpapercave.com/wp/wp7682755.jpg");
+        
+    }
+</style>
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; ">
+    <form method="POST" style="width: 500px;background-color: #f8f9fa;align-items: center;padding :50px">  
+        {% csrf_token %}
+        {{ form|crispy }}  
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Sign Up</button>
+        <div align="center" class="form-group">
+            <a href="{% url 'index' %}" class="btn btn-primary btn-md" style="padding: 10px 20px; font-size: 18px; border-radius: 5px; background-color: #007bff; border: none; transition: background-color 0.3s ease;">login</a>
+        </div>
+    </form>
+   
+</div>
+
+{% endblock body %}
