@@ -11,51 +11,70 @@
 {% endblock buttons %}
 
 {% block body %}
-    <div class="container-fluid">
-        <h3 class="alert alert-secondary my-1" align="center">Create a new group</h3>
-        <div align='center' id="create_group">
-            <div class="container d-flex h-100 row justify-content-center col-20">
-                <form style="width: 80%; font-weight: bolder;"  method="POST">
-                    {% csrf_token %}
-                    {{ groupForm|crispy }}
-                    <input class="btn btn-success" type="submit" value="Create">
-                </form>
-            </div>
-        </div>
-        <div id='groups'>
-            <h1 class="alert alert-info my-3" align="center">Groups</h1>
-            <form class="form-inline my-2 my-lg-0">
-                <input id="searchGroup" class="form-control mr-sm-2" type="search" placeholder="Search Group"
-                    aria-label="Search">
-                    <a class="btn btn-dark" href="{% url 'view_exams' %}" target="_blank">View Exams</a>
-            </form>
-            <div class="row">
-                {% for group in special_students_db %}
-                <div class="card my-3 mx-5 col-sm-3">
-                    <h3 class="card-header">{{ group.category_name }}</h3>
-                    <div class="card-body">
-                        <p class="card-text">
-                            <h4 class="card-subtitle mb-2 text-muted">Students</h4>
-                            {% for stud in group.students.all %}
-                            {{stud.username}}
-                            {% endfor %}
-                            <br><br>
-                            <h4 class="card-subtitle mb-2 text-muted">Exams</h4>
-                            {% for exam in group.exams.all %}
-                                {{ exam.name }}
-                                {% empty %}
-                                    No exams associated
-                            {% endfor %}
-                        </p>
-                        <a href="{% url 'edit_group' group.id %}"
-                            class="card-link btn btn-info">Edit</a>
-                    </div>
+<div class="container mt-5">
+    <!-- Create New Group -->
+    <div class="card shadow-lg p-4 mb-5">
+        <h3 class="text-center text-secondary mb-4">Create a New Group</h3>
+        <div id="create_group" class="d-flex justify-content-center">
+            <form method="POST" style="width: 80%; font-weight: bolder;">
+                {% csrf_token %}
+                {{ groupForm|crispy }}
+                <div class="text-center mt-3">
+                    <input class="btn btn-success btn-lg" type="submit" value="Create">
                 </div>
-                {% empty %}
-                <h3>No groups</h3>
-                {% endfor %}
-            </div>
+            </form>
         </div>
     </div>
-    <script src="{% static 'prof/js/groups.js' %}"></script>
+
+    <!-- Group List -->
+    <div class="card shadow-lg p-4">
+        <h3 class="text-center text-info mb-4">Groups</h3>
+        <div class="mb-4">
+            <form class="form-inline d-flex justify-content-center">
+                <input id="searchGroup" class="form-control form-control-lg mr-2" type="search" placeholder="Search Group" aria-label="Search">
+                <a class="btn btn-dark btn-lg" href="{% url 'view_exams' %}" target="_blank">View Exams</a>
+            </form>
+        </div>
+
+        <div class="row">
+            {% if special_students_db %}
+            {% for group in special_students_db %}
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="card shadow-sm h-100">
+                    <h3 class="card-header text-center text-secondary">{{ group.category_name }}</h3>
+                    <div class="card-body">
+                        <h4 class="card-subtitle mb-3 text-muted">Students</h4>
+                        <ul class="list-unstyled">
+                            {% for stud in group.students.all %}
+                            <li>{{ stud.username }}</li>
+                            {% endfor %}
+                        </ul>
+
+                        <h4 class="card-subtitle mb-3 text-muted">Exams</h4>
+                        <ul class="list-unstyled">
+                            {% for exam in group.exams.all %}
+                            <li>{{ exam.name }}</li>
+                            {% empty %}
+                            <li>No exams associated</li>
+                            {% endfor %}
+                        </ul>
+
+                        <div class="text-center mt-3">
+                            <a href="{% url 'edit_group' group.id %}" class="btn btn-info btn-block">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-12">
+                <h3 class="text-center text-danger">No Groups Available</h3>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'prof/js/groups.js' %}"></script>
+
 {% endblock body %}

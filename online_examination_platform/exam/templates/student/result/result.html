@@ -7,15 +7,14 @@
 
 {% block body %}
 <br/>
-<center>
-    <div style="width: 80%;" class="jumbotron container-fluid my-2">
-        <h1 class="display-4">Congratulations!🎉</h1>
-        <p class="lead">You have successfuly submitted your response.</p>
-        <hr class="my-4">
-        <p>Visit the link below to check your result.</p>
-        <p class="lead">
-          <a class="btn btn-primary" href="{%url 'results'%}"  role="button">Check results</a>
-        </p>
-    </div>
-</center>
+<div class="container my-5">
+  <div class="jumbotron text-center shadow-lg p-4">
+      <h1 class="display-4 text-success font-weight-bold">Congratulations! 🎉</h1>
+      <p class="lead">You have successfully submitted your response.</p>
+      <hr class="my-4">
+      <p>Visit the link below to check your result.</p>
+      <a class="btn btn-primary btn-lg mt-3" href="{% url 'results' %}" role="button">Check Results</a>
+  </div>
+</div>
+
 {% endblock body %}

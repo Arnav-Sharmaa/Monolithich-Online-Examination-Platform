@@ -6,32 +6,39 @@
 {% block action %}Home{% endblock action %}
 
 {% block body %}
-   <div class="container-fluid my-2">
-        <div id="completed_exams" class="alert alert-primary">
-            <h3 align="center">Tests Completed</h3>
-            <ol class="list-group">
-                {% for i in paper %}
-                {% if  i.completed == 1 %}
-                <li class="list-group-item list-group-item-action my-1 text-center">{{ i.examname }}</li>
-                {% endif %}
-                {% endfor %}
-            </ol>
-        </div>
-        <div id="upcoming_exams" class="my-6 alert alert-secondary">
-            <h3 align="center" >UpComing Exams</h3>
-            <ol class="list-group">
-                {% for i in paper %}
-                {% if  i.completed == 0 %}
-                    <li class="list-group-item list-group-item-action my-1 text-center">{{ i.examname }}
-                        <form method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" value="{{ i.examname }}" name="paper">
-                            <input class="btn btn-info" type="submit" value="Attempt">
-                        </form>
-                    </li>
-                {% endif %}
-                {% endfor %}
-            </ol>
-        </div>
+<div class="container my-5">
+    <!-- Completed Exams Section -->
+    <div id="completed_exams" class="alert alert-primary shadow-sm">
+        <h3 class="text-center text-dark mb-4"><i class="fas fa-check-circle"></i> Tests Completed</h3>
+        <ol class="list-group list-group-flush">
+            {% for i in paper %}
+            {% if i.completed == 1 %}
+            <li class="list-group-item list-group-item-action my-2 text-center">
+                <span class="h5">{{ i.examname }}</span>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ol>
     </div>
+
+    <!-- Upcoming Exams Section -->
+    <div id="upcoming_exams" class="alert alert-secondary shadow-sm mt-5">
+        <h3 class="text-center text-dark mb-4"><i class="fas fa-hourglass-start"></i> Upcoming Exams</h3>
+        <ol class="list-group list-group-flush">
+            {% for i in paper %}
+            {% if i.completed == 0 %}
+            <li class="list-group-item list-group-item-action my-2 text-center">
+                <span class="h5">{{ i.examname }}</span>
+                <form method="POST" class="d-inline-block mt-3">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ i.examname }}" name="paper">
+                    <input class="btn btn-info" type="submit" value="Attempt">
+                </form>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+
 {% endblock body %}

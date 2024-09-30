@@ -13,61 +13,67 @@
 {% endblock buttons %}
 
 {% block body %}
-    <div class="container-fluid">
-        <h2 style="font-style: italic;" class="alert alert-secondary my-1" align="center">Create a new exam</h2>
-        <div style="margin-left:10%; margin-right: 10%;">
-
-            <div style = "font-weight: bold;" class="container d-flex h-100 row justify-content-center col-20">
-                <form style = "width:100%;" method="POST">
-                    {% csrf_token %}
-                    {{ examform|crispy }}
-                    <input class="btn btn-success" type="submit" value="Create">
-                </form>
-            </div>
-
-        </div>
-        <div id='exams'>
-            <h2 class="alert alert-dark my-3" style="font-style: italic" align="center">Exams available</h2>
-            <div style = "width: 100%; margin-left:10%; margin-right: 10%;">
-                <form class="form-inline my-2">
-                    <input id="searchExam" class="form-control mr-sm-2" type="search" placeholder="Search Exam"
-                        aria-label="Search">
-                    <a class="btn btn-dark" href="{% url 'view_groups' %}" target="_blank">View
-                        Groups</a>
-                </form>
-                <div class="row">
-                    {% for t in exams %}
-                    <div class="card my-3 mx-5 col-sm-3">
-                        <h3 class="card-header">{{ t.name }}</h3>
-                        <div class="card-body">
-
-                            <h6 class="card-subtitle mb-2 text-muted">
-                                Start : {{ t.start_time }}<br>
-                                Expiry : {{ t.end_time }}
-                            </h6>
-                            <p class="card-text">
-                                Total Marks : {{t.total_marks}}<br>
-                                Duration : {{t.duration}}<br>
-                                Question Paper : <a
-                                    href="{% url 'view_specific_paper' t.question_paper.id %}">{{ t.question_paper.qPaperTitle }}</a><br>
-                                Student Group(s) :
-                                {% for group in t.student_group.all %}
-                                {{ group.category_name }}
-                                {% endfor %}
-                            </p>
-                            <a href="{% url 'edit_exam' t.id %}" class="card-link btn btn-info">Edit</a>
-                        </div>
-                    </div>
-                    {% empty %}
-                    </br>
-                    <div style="width:100%; margin-left: 5%;">
-                        <h3>No exams</h3>
-                    </div>
-                    {% endfor %}
+<div class="container mt-5">
+    <!-- Create New Exam -->
+    <div class="card shadow-lg p-4 mb-5">
+        <h2 class="text-center text-secondary font-italic mb-4">Create a New Exam</h2>
+        <div class="d-flex justify-content-center">
+            <form method="POST" style="width: 100%; font-weight: bolder;">
+                {% csrf_token %}
+                {{ examform|crispy }}
+                <div class="text-center mt-3">
+                    <input class="btn btn-success btn-lg" type="submit" value="Create">
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+
+    <!-- Exams Available -->
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-dark font-italic mb-4">Exams Available</h2>
+        <div class="mb-4">
+            <form class="form-inline d-flex justify-content-center">
+                <input id="searchExam" class="form-control form-control-lg mr-2" type="search" placeholder="Search Exam" aria-label="Search">
+                <a class="btn btn-dark btn-lg" href="{% url 'view_groups' %}" target="_blank">View Groups</a>
+            </form>
+        </div>
+
+        <div class="row">
+            {% if exams %}
+            {% for t in exams %}
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="card shadow-sm h-100">
+                    <h3 class="card-header text-center text-secondary">{{ t.name }}</h3>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3 text-muted">
+                            Start: {{ t.start_time }}<br>
+                            Expiry: {{ t.end_time }}
+                        </h6>
+                        <p class="card-text">
+                            Total Marks: {{ t.total_marks }}<br>
+                            Duration: {{ t.duration }}<br>
+                            Question Paper: <a href="{% url 'view_specific_paper' t.question_paper.id %}">{{ t.question_paper.qPaperTitle }}</a><br>
+                            Student Group(s): 
+                            {% for group in t.student_group.all %}
+                            {{ group.category_name }}
+                            {% endfor %}
+                        </p>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'edit_exam' t.id %}" class="btn btn-info btn-block">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-12">
+                <h3 class="text-center text-danger">No Exams Available</h3>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
     <script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="//cdn.bootcss.com/moment.js/2.17.1/moment.min.js"></script>
